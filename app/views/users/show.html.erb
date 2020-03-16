@@ -1,0 +1,300 @@
+<h1><%= @user.username %></h1>
+<hr>
+
+<dl>
+  <dt>Private</dt>
+  <dd><%= @user.private ? "Yes" : "No" %></dd>
+
+  <dt>Followers</dt>
+  <dd>
+    <%= @user.followers.count() %>
+    <% if session[:user_id] != @user.id %>  
+      <% if (@user.followers.include? User.where({:id => session[:user_id]})[0]) %>
+        <div>
+          <a href="/delete_follow_request/<%=(FollowRequest.where({ recipient_id: @user.id, sender_id: session[:user_id]})[0]).id%>">
+            Unfollow
+          </a>
+        </div>
+      <% elsif (FollowRequest.where({ recipient_id: @user.id, sender_id: session[:user_id]})[0] != nil) %>
+        <div>
+        Request sent. <a href="/delete_follow_request/<%=(FollowRequest.where({ recipient_id: @user.id, sender_id: session[:user_id]})[0]).id%>"> Cancel </a>
+        </div>
+      <% else %>
+        <div>
+          <form action="/insert_follow_request"  method="post">
+            <input type="hidden" name="query_recipient_id" value=<%= @user.id %>>
+
+            <button>
+              Follow
+            </button>
+          </form>
+        </div>
+      <% end %>
+    <% else %>
+      <ul>
+        <% @user.pending_follow_requests.each do |request| %>
+          <li>
+            <%= User.where({:id => request.sender_id})[0].username %>
+
+            <form action="/modify_follow_request/<%=request.id%>" method="post">
+              <input name="query_status" value="accepted" type="hidden">
+
+              <button>
+                Accept
+              </button>
+            </form>
+
+            <form action="/delete_follow_request/<%=request.id%>">
+              <input name="query_status" value="rejected" type="hidden">
+            
+              <button>
+                Reject
+              </button>
+            </form>
+          </li>
+        <% end %>
+      </ul>
+    <% end %>
+
+  </dd>
+
+  <dt>Following</dt>
+  <dd><%= @user.following.count() %></dd>
+
+  <% if session[:user_id] == @user.id %>  
+  <dt>Edit user</dt>
+  <dd>
+    <form action="/modify_user_small" method="post">
+      <label for="browser_username">Username</label>
+      <input id="browser_username" type="text" name="query_username" placeholder="Enter a username...">
+
+      <label for="browser_private">Private?</label>
+      <input id="browser_private" type="checkbox" name="query_private" >
+
+      <button>Update user</button>
+    </form>
+  </dd>
+  <% end %>  
+</dl>
+<hr>
+
+<h3>Schedule</h3>
+<% if (session[:user_id] == @user.id or !@user.private) or @user.followers_ids.include? session[:user_id] %>
+  <table border="1">
+  <tr>
+    <th>
+      Course Slot
+    </th>
+    <th>
+      Course Name
+    </th>
+    <th>
+      Current Capacity
+    </th>
+    <th>
+      Max Capacity
+    </th>
+    <th>
+      Description
+    </th>
+    <th>
+      Professor
+    </th>
+    <% if session[:user_id] == @user.id %>
+      <th>Drop Course?</th>
+    <% end %>
+  </tr>
+
+  <tr>
+    <th>1</th>
+    <td>
+      <%= @user.schedule.course1 == nil ? "" : Course.where({:id => @user.schedule.course1})[0].name %> 
+    </td>
+    <td>
+      <%= @user.schedule.course1 == nil ? "" : Course.where({:id => @user.schedule.course1})[0].currentcount %> 
+    </td>
+    <td>
+      <%= @user.schedule.course1 == nil ? "" : Course.where({:id => @user.schedule.course1})[0].maxcapacity %> 
+    </td>
+    <td>
+      <%= @user.schedule.course1 == nil ? "" : Course.where({:id => @user.schedule.course1})[0].description %> 
+    </td>
+    <td>
+      <%= @user.schedule.course1 == nil ? "" : Course.where({:id => @user.schedule.course1})[0].professor %> 
+    </td>
+
+    <% if session[:user_id] == @user.id %>
+      <td>
+        <% if @user.schedule.course1 != nil %>
+          <div>
+            <form action="/remove_course?num=1" method="post">
+              <button>
+                Drop Course 1
+              </button>
+            </form>
+          </div>
+        <% end %>
+      </td>
+    <% end %>
+  </tr>
+
+  <tr>
+    <th>2</th>
+    <td>
+      <%= @user.schedule.course2 == nil ? "" : Course.where({:id => @user.schedule.course2})[0].name %> 
+    </td>
+    <td>
+      <%= @user.schedule.course2 == nil ? "" : Course.where({:id => @user.schedule.course2})[0].currentcount %> 
+    </td>
+    <td>
+      <%= @user.schedule.course2 == nil ? "" : Course.where({:id => @user.schedule.course2})[0].maxcapacity %> 
+    </td>
+    <td>
+      <%= @user.schedule.course2 == nil ? "" : Course.where({:id => @user.schedule.course2})[0].description %> 
+    </td>
+    <td>
+      <%= @user.schedule.course2 == nil ? "" : Course.where({:id => @user.schedule.course2})[0].professor %> 
+    </td>
+    <% if session[:user_id] == @user.id %>
+      <td>
+        <% if @user.schedule.course2 != nil %>
+          <div>
+            <form action="/remove_course?num=2" method="post">
+              <button>
+                Drop Course 2
+              </button>
+            </form>
+          </div>
+        <% end %>
+      </td>
+    <% end %>
+  </tr>
+
+  <tr>
+    <th>3</th>
+    <td>
+      <%= @user.schedule.course3 == nil ? "" : Course.where({:id => @user.schedule.course3})[0].name %> 
+    </td>
+    <td>
+      <%= @user.schedule.course3 == nil ? "" : Course.where({:id => @user.schedule.course3})[0].currentcount %> 
+    </td>
+    <td>
+      <%= @user.schedule.course3 == nil ? "" : Course.where({:id => @user.schedule.course3})[0].maxcapacity %> 
+    </td>
+    <td>
+      <%= @user.schedule.course3 == nil ? "" : Course.where({:id => @user.schedule.course3})[0].description %> 
+    </td>
+    <td>
+      <%= @user.schedule.course3 == nil ? "" : Course.where({:id => @user.schedule.course3})[0].professor %> 
+    </td>
+    <% if session[:user_id] == @user.id %>
+      <td>
+        <% if @user.schedule.course3 != nil %>
+          <div>
+            <form action="/remove_course?num=3" method="post">
+              <button>
+                Drop Course 3
+              </button>
+            </form>
+          </div>
+        <% end %>
+      </td>
+    <% end %>
+  </tr>
+
+  <tr>
+    <th>4</th>
+    <td>
+      <%= @user.schedule.course4 == nil ? "" : Course.where({:id => @user.schedule.course4})[0].name %> 
+    </td>
+    <td>
+      <%= @user.schedule.course4 == nil ? "" : Course.where({:id => @user.schedule.course4})[0].currentcount %> 
+    </td>
+    <td>
+      <%= @user.schedule.course4 == nil ? "" : Course.where({:id => @user.schedule.course4})[0].maxcapacity %> 
+    </td>
+    <td>
+      <%= @user.schedule.course4 == nil ? "" : Course.where({:id => @user.schedule.course4})[0].description %> 
+    </td>
+    <td>
+      <%= @user.schedule.course4 == nil ? "" : Course.where({:id => @user.schedule.course4})[0].professor %> 
+    </td>
+    <% if session[:user_id] == @user.id %>
+      <td>
+        <% if @user.schedule.course4 != nil %>
+          <div>
+            <form action="/remove_course?num=4" method="post">
+              <button>
+                Drop Course 4
+              </button>
+            </form>
+          </div>
+        <% end %>
+      </td>
+    <% end %>
+  </tr>
+
+  </table>
+<% else %>
+  You are not permitted to view this.
+<% end %>
+
+<% if session[:user_id] == @user.id %>
+  <hr>
+  <h3>Feed</h3>
+  <table class="table" border = "1">
+      <tr>
+        <th>
+          Owner
+        </th>
+
+        <th>
+          Course 1
+        </th>
+
+        <th>
+          Course 2
+        </th>
+
+        <th>
+          Course 3
+        </th>
+
+        <th>
+          Course 4
+        </th>
+
+        <th>
+          Full Schedule
+        </th>
+      </tr>
+
+      <% @current_user.following_schedules.each do |schedule| %>
+      <tr>
+        <td>
+          <%= User.where({:id => schedule.owner_id})[0].username %>
+        </td>
+
+        <td>
+          <%= schedule.course1 == nil ? "" : Course.where({:id => schedule.course1})[0].name %> 
+        </td>
+        <td>
+          <%= schedule.course2 == nil ? "" : Course.where({:id => schedule.course2})[0].name %> 
+        </td>
+        <td>
+          <%= schedule.course3 == nil ? "" : Course.where({:id => schedule.course3})[0].name %> 
+        </td>
+        <td>
+          <%= schedule.course4 == nil ? "" : Course.where({:id => schedule.course4})[0].name %> 
+        </td>
+
+        <td>
+          <a href="/users/<%= User.where({:id => schedule.owner_id})[0].username %>">
+            See more
+          </a>
+        </td>
+      </tr>
+      <% end %>
+    </table>
+
+<% end %>

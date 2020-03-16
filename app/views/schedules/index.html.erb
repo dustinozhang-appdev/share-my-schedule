@@ -1,0 +1,66 @@
+<div class="row mb-3">
+  <div class="col-md-12">
+    <h1>
+      Public Schedule Directory
+    </h1>
+  </div>
+</div>
+<hr>
+<div class="row mb-3">
+  <div class="col-md-12">
+    <table class="table" border = "1">
+      <tr>
+        <th>
+          Owner
+        </th>
+
+        <th>
+          Course 1
+        </th>
+
+        <th>
+          Course 2
+        </th>
+
+        <th>
+          Course 3
+        </th>
+
+        <th>
+          Course 4
+        </th>
+
+        <th>
+          Full Schedule
+        </th>
+      </tr>
+
+      <% @schedules.each do |schedule| %>
+      <tr>
+        <td>
+          <%= User.where({:id => schedule.owner_id})[0].username %>
+        </td>
+
+        <td>
+          <%= schedule.course1 == nil ? "" : Course.where({:id => schedule.course1})[0].name %> 
+        </td>
+        <td>
+          <%= schedule.course2 == nil ? "" : Course.where({:id => schedule.course2})[0].name %> 
+        </td>
+        <td>
+          <%= schedule.course3 == nil ? "" : Course.where({:id => schedule.course3})[0].name %> 
+        </td>
+        <td>
+          <%= schedule.course4 == nil ? "" : Course.where({:id => schedule.course4})[0].name %> 
+        </td>
+
+        <td>
+          <a href="/users/<%= User.where({:id => schedule.owner_id})[0].username %>">
+            See more
+          </a>
+        </td>
+      </tr>
+      <% end %>
+    </table>
+  </div>
+</div>

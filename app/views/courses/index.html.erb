@@ -1,0 +1,168 @@
+<% if @full != nil %>
+  Course is full. Could not add.
+<% end %>
+<% if @alreadyadded != nil %>
+  You are already enrolled in this course. Could not add.
+<% end %>
+<% if @noslots != nil %>
+  No free course slots in your schedule. Could not add.
+<% end %>
+<% if @justadded != nil %>
+  Successfully added course!
+<% end %>
+
+<div class="row mb-3">
+  <div class="col-md-12">
+    <h1>
+      Course Directory
+    </h1>
+  </div>
+</div>
+
+<hr>
+
+<div class="row mb-3">
+  <div class="col-md-8 offset-md-2">
+    <h2>
+      Add a new course
+    </h2>
+
+    <form action="/insert_course" method="post">
+      <div class="form-group">
+        <label for="professor_box">
+          Professor
+        </label>
+
+        <input type="text" id="professor_box" name="query_professor" class="form-control">
+      </div>
+
+      <div class="form-group">
+        <label for="description_box">
+          Description
+        </label>
+
+        <input type="text" id="description_box" name="query_description" class="form-control">
+      </div>
+
+      <div class="form-group">
+        <label for="name_box">
+          Name
+        </label>
+
+        <input type="text" id="name_box" name="query_name" class="form-control">
+      </div>
+
+      <div class="form-group">
+        <label for="capacity_box">
+          Max Capacity
+        </label>
+
+        <input type="text" id="capacity_box" name="query_max_capacity" class="form-control">
+      </div>
+
+      <button class="btn btn-block btn-outline-secondary">
+        Create course
+      </button>
+    </form>
+  </div>
+</div>
+
+<hr>
+<div class="row mb-3">
+  <div class="col-md-12">
+    <table border = "1">
+      <tr>
+        <th>
+          ID
+        </th>
+        <th>
+          Name
+        </th>
+
+        <th>
+          Professor
+        </th>
+
+        <th>
+          Description
+        </th>
+
+        <th>
+          Current Capacity
+        </th>
+
+        <th>
+          Max Capacity
+        </th>
+
+        <th>
+          Created at
+        </th>
+
+        <th>
+          Updated at
+        </th>
+
+        <th>
+          Edit Course
+        </th>
+
+        <th>
+        </th>
+      </tr>
+
+      <% @courses.each do |course| %>
+      <tr>
+        <td>
+          <%= course.id %>
+        </td>
+
+        <td>
+          <%= course.name %>
+        </td>
+
+        <td>
+          <%= course.professor %>
+        </td>
+
+        <td>
+          <%= course.description %>
+        </td>
+
+        <td>
+          <%= course.currentcount %>
+        </td>
+
+        <td>
+          <%= course.maxcapacity %>
+        </td>
+
+        <td>
+          <%= time_ago_in_words(course.created_at) %> ago
+        </td>
+        <td>
+          <%= time_ago_in_words(course.updated_at) %> ago
+        </td>
+
+        <td>
+          <a href="/courses/<%= course.id %>">
+            See more
+          </a>
+        </td>
+
+        <td>
+          <div>
+            <form action="/add_course?id=<%=course.id%>" method="post">
+              <button>
+                Add to Schedule
+              </button>
+            </form>
+          </div>
+        </td>
+      </tr>
+      <% end %>
+    </table>
+  </div>
+</div>
+
+<hr>

@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<% if @justsignedout != nil %>
+  Signed out successfully.
+<% end %>
+<% if @justsignedin != nil %>
+  Signed in successfully.
+<% end %>
+<% if @justcreated != nil %>
+  User account created successfully.
+<% end %>
+<% if @accessdenied != nil %>
+  You do not have permission to view this page.
+<% end %>
+
+<h1>Student Directory</h1>
+<hr>
+<table border="1">
+  <tr>
+    <th>
+      CNet
+    </th>
+
+    <th>
+      Private?
+    </th>
+
+    <th>Profile</th>
+    
+  </tr>
+
+  <% @users.each do |user| %>
+  <tr>
+    <td>
+      <%= user.username %>
+    </td>
+
+    <td>
+      <%= user.private ? "Yes" : "No" %>
+    </td>
+
+    <td>
+      <a href="/users/<%= user.username %>">See more</a>
+    </td>
+  </tr>
+  
+  <% end %>
+</table>
+
+</html>
