@@ -38,6 +38,14 @@ namespace(:dev) do
         {id: 1609, sender_id: 81, recipient_id: 83, status: "pending", created_at: "2018-03-20 11:34:16", updated_at: "2019-10-08 10:25:00"},
         {id: 1610, sender_id: 82, recipient_id: 83, status: "accepted", created_at: "2018-01-28 00:37:26", updated_at: "2019-10-08 10:25:00"},
         {id: 1611, sender_id: 81, recipient_id: 84, status: "accepted", created_at: "2016-06-22 02:42:45", updated_at: "2019-10-08 10:25:00"},
+        {id: 1612, sender_id: 84, recipient_id: 83, status: "pending", created_at: "2018-03-20 11:34:16", updated_at: "2019-10-08 10:25:00"},
+        {id: 1613, sender_id: 85, recipient_id: 83, status: "accepted", created_at: "2018-03-20 11:34:16", updated_at: "2019-10-08 10:25:00"},
+        {id: 1614, sender_id: 85, recipient_id: 81, status: "accepted", created_at: "2018-03-20 11:34:16", updated_at: "2019-10-08 10:25:00"},
+        {id: 1615, sender_id: 85, recipient_id: 84, status: "accepted", created_at: "2018-03-20 11:34:16", updated_at: "2019-10-08 10:25:00"},
+        {id: 1616, sender_id: 83, recipient_id: 85, status: "accepted", created_at: "2015-04-24 01:26:47", updated_at: "2019-10-08 10:25:00"},
+        {id: 1617, sender_id: 82, recipient_id: 85, status: "pending", created_at: "2015-04-24 01:26:47", updated_at: "2019-10-08 10:25:00"},
+        {id: 1618, sender_id: 81, recipient_id: 85, status: "accepted", created_at: "2015-04-24 01:26:47", updated_at: "2019-10-08 10:25:00"},
+        {id: 1619, sender_id: 84, recipient_id: 85, status: "pending", created_at: "2015-04-24 01:26:47", updated_at: "2019-10-08 10:25:00"},
       ]
       FollowRequest.insert_all!(follow_requests)
 
